@@ -7,6 +7,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Enseignant } from 'src/models/enseignant';
 import { Etudiant } from 'src/models/etudiant';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AffecterEnseignantComponent } from '../affecter-enseignant/affecter-enseignant.component';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,7 +27,7 @@ export class MemberComponent implements AfterViewInit{
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor (private MS: MemberService){
+  constructor (private MS: MemberService,private dialog: MatDialog,  private router: Router){
     this.MS.getEnseignants().subscribe(members => {
       this.enseignantSource = new MatTableDataSource(members)
     });
@@ -57,6 +60,29 @@ export class MemberComponent implements AfterViewInit{
     if (this.etudiantSource.paginator) {
       this.etudiantSource.paginator.firstPage();
     }
+  }
+
+  affecter(etudiant: Member): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    const dialogRef = this.dialog.open(AffecterEnseignantComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe((data) =>
+    {
+      console.log(data);
+      this.MS.affectEtudiantToEnseignant(etudiant, data.encadrant).subscribe(()=>{
+        // or manually add the tool to the existing list
+        // this.dataSource.push(toolNew);
+        this.router.navigate(['/dashboard']);
+        // Close the dialog
+
+      });
+    });
+
+
   }
 
 }

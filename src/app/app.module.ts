@@ -47,6 +47,10 @@ import {ErrorStateMatcher} from '@angular/material/core';
 import {MatSelectModule} from '@angular/material/select';
 import { MatSortModule} from '@angular/material/sort';
 import { MatPaginatorModule} from '@angular/material/paginator';
+import { AffecterEnseignantComponent } from './affecter-enseignant/affecter-enseignant.component';
+import { AffecterMemberComponent } from './affecter-member/affecter-member.component';
+import {MatChipsModule} from '@angular/material/chips';
+import { ConsulterMemberComponent } from './consulter-member/consulter-member.component';
 
 
 @NgModule({
@@ -65,6 +69,9 @@ import { MatPaginatorModule} from '@angular/material/paginator';
     ToolsCreateComponent,
     EnseignantFormComponent,
     EtudiantFormComponent,
+    AffecterEnseignantComponent,
+    AffecterMemberComponent,
+    ConsulterMemberComponent,
 
 
   ],
@@ -101,6 +108,7 @@ import { MatPaginatorModule} from '@angular/material/paginator';
     MatSelectModule,
     MatSortModule,
     MatPaginatorModule,
+    MatChipsModule,
 
 
   ],

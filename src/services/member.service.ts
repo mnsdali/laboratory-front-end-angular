@@ -68,6 +68,11 @@ export class MemberService {
     //return new Observable((observer) => {observer.next(this.tab.find((member)=>member.id === id))});
   }
 
+  affectEtudiantToEnseignant(etudiant : Member, enseignant : Member) : Observable<void>
+  {
+    return this.httpClient.put<void>(`${API.url}/${API.member}/members/affect-encadrant/${enseignant.id}`, etudiant.id);
+  }
+
 
   getNbPubMembers(): Observable<number[]>
   {
@@ -81,14 +86,19 @@ export class MemberService {
 
   affectMemberToEvent(idMember: number, idEvent: number): Observable<void>
   {
-    return this.httpClient.get<void>(`${API.url}/${API.member}/members/affect-event/${idMember}/${idEvent}`);
+    return this.httpClient.post<void>(`${API.url}/${API.member}/members/affect-event/${idEvent}`,idMember);
   }
   affectMemberToTool(idMember: number, idTool: number): Observable<void>
   {
-    return this.httpClient.get<void>(`${API.url}/${API.member}/members/affect-tool/${idMember}/${idTool}`);
+    return this.httpClient.post<void>(`${API.url}/${API.member}/members/affect-tool/${idTool}`,idMember);
   }
   affectMemberToPub(idMember: number, idPub: number): Observable<void>
   {
-    return this.httpClient.get<void>(`${API.url}/${API.member}/members/affect-pub/${idMember}/${idPub}`);
+    return this.httpClient.post<void>(`${API.url}/${API.member}/members/affect-pub/${idPub}`,idMember);
+  }
+
+  getMemberByOutil(idOutil: number) : Observable<Member>
+  {
+    return this.httpClient.get<Member>(`${API.url}/${API.member}/members/members-outil/${idOutil}`);
   }
 }

@@ -4,6 +4,6 @@ export const API = {
   url: 'http://localhost:9000',
   member: 'MEMBER-SERVICE',
   event: 'EVENEMENT-SERVICE',
-  tool: 'TOOL-SERVICE',
+  tool: 'OUTIL-SERVICE',
   publication: 'PUBLICATION-SERVICE',
 };
