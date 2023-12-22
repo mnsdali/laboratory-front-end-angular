@@ -1,0 +1,32 @@
+<form [formGroup]="range" (ngSubmit)="OnSubmit()">
+<mat-form-field class="example-full-width" appearance="fill">
+  <mat-label>titre</mat-label>
+  <input matInput name="titre" formControlName="titre" placeholder="IEEEXtreme16" >
+</mat-form-field>
+
+<mat-form-field>
+  <mat-label>Enter a date range</mat-label>
+  <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+    <input matStartDate formControlName="dateDebut" placeholder="Start date">
+    <input matEndDate formControlName="dateFin" placeholder="End date">
+  </mat-date-range-input>
+  <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-date-range-picker #picker></mat-date-range-picker>
+
+
+</mat-form-field>
+
+
+
+<mat-form-field class="example-full-width" appearance="fill">
+  <mat-label>Lieu</mat-label>
+  <input matInput name="lieu" formControlName="lieu" placeholder="Sfax" >
+</mat-form-field>
+
+<button mat-fab extended color="primary" type="submit">
+  <mat-icon>favorite</mat-icon>
+  Submit
+</button>
+
+</form>
