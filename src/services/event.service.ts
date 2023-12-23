@@ -34,6 +34,7 @@ export class EvenementService {
   }
 
   deleteEvenement(id: number): Observable<void>{
+    this.httpClient.delete<void>(`${API.url}/${API.member}/members-per-event/${id}/delete`);
     return this.httpClient.delete<void>(`${API.url}/${API.event}/events/${id}/delete`);
   }
 
@@ -41,5 +42,9 @@ export class EvenementService {
     return this.httpClient.get<Evenement>(`${API.url}/${API.event}/events/${id}`);
     //return new Observable((observer) => {observer.next(this.tab.find((event)=>event.id === id))});
   }
+
+  
+
+
 }
 

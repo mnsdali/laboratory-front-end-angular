@@ -16,7 +16,8 @@ export class EtudiantFormComponent {
   matcher = new MyErrorStateMatcher();
   form!: FormGroup;
   etudiantGlobal!: Member;
-  enseignants : Enseignant[] = []
+  enseignants : Enseignant[] = [];
+  idCourant1: number;
   constructor(private MS: MemberService, private router:Router, private activatedRoute: ActivatedRoute) { }
 
   initForm(): void{
@@ -29,7 +30,7 @@ export class EtudiantFormComponent {
       // email: new FormControl(null, [Validators.required]),
       // password: new FormControl(null, [Validators.required]),
       // role : new FormControl("etudiant", [Validators.required]),
-      encadrant : new FormControl(null, [Validators.required]),
+      // encadrant : new FormControl(null, [Validators.required]),
       dateInscription : new FormControl(null, [Validators.required]),
       diplome : new FormControl(null, []),
       sujet : new FormControl(null, []),
@@ -46,7 +47,7 @@ export class EtudiantFormComponent {
       // email: new FormControl(etudiant.email, [Validators.required, Validators.email]),
       // password: new FormControl(etudiant.password, [Validators.required]),
       // role : new FormControl(etudiant.role, [Validators.required]),
-      encadrant : new FormControl(etudiant.encadrant, [Validators.required]),
+      // encadrant : new FormControl(etudiant.encadrant, [Validators.required]),
       dateInscription : new FormControl(etudiant.dateInscription, [Validators.required]),
       diplome : new FormControl(etudiant.diplome, []),
       sujet : new FormControl(etudiant.sujet, []),
@@ -57,11 +58,11 @@ export class EtudiantFormComponent {
   ngOnInit():void{
 
     this.MS.getEnseignants().subscribe((enseignants)=>{this.enseignants = enseignants});
-    const idCourant1 = this.activatedRoute.snapshot.params['id']; // "1234"
-    console.log(idCourant1);
-    if (!!idCourant1) // if truly idCourant  // je suis dans edit
+    this.idCourant1 = this.activatedRoute.snapshot.params['id']; // "1234"
+    console.log(this.idCourant1);
+    if (!!this.idCourant1) // if truly idCourant  // je suis dans edit
     {
-      this.MS.getMemberById(idCourant1).subscribe((etudiant)=>{
+      this.MS.getMemberById(this.idCourant1).subscribe((etudiant)=>{
           this.etudiantGlobal = etudiant;
           this.initForm2(etudiant);
       })
@@ -75,13 +76,19 @@ export class EtudiantFormComponent {
     // récupérer le contenu
     console.log(this.form.value);
 
-    const etudiant = {...this.etudiantGlobal, ...this.form.value};
+    var etudiant = {...this.etudiantGlobal, ...this.form.value};
     // const etudiantNew = {...etudiant,
     //   //  id: etudiant.id ?? Math.ceil(Math.random()*1000),
     //     // createdDate: etudiant.createdDate ?? new Date().toISOString()
     // };
+    if (!!this.idCourant1) // if truly idCourant  // je suis dans edit
+    {
+      etudiant = {id:this.idCourant1, ...etudiant};
+      this.MS.updateMember("etudiant", etudiant).subscribe(()=> {this.router.navigate(['/members'])});
+    }else{
+      this.MS.saveMember("etudiant", etudiant).subscribe(()=> {this.router.navigate(['/members'])});
+    }
 
-    this.MS.saveMember("etudiant", etudiant).subscribe(()=> {this.router.navigate(['/members'])});
 
 
 

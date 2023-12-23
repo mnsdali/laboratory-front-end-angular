@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { GLOBAL } from '../app-config';
 import { Member } from 'src/models/member';
 import { MemberService } from 'src/services/member.service';
@@ -17,31 +17,48 @@ import { Router } from '@angular/router';
   templateUrl: './member.component.html',
   styleUrls: ['./member.component.css']
 })
-export class MemberComponent implements AfterViewInit{
+export class MemberComponent implements AfterViewInit, OnInit{
   enseignantSource: MatTableDataSource<Enseignant>;
   etudiantSource: MatTableDataSource<Etudiant>;
 
-  enseignantColumns: string[] = ['id', 'cin', 'nom','prenom','dateNaissance','cv', 'grade', 'etablissement', 'actions'];
-  etudiantColumns: string[] = ['id', 'cin', 'nom','prenom','dateNaissance','cv','encadrant','dateInscription','diplome','sujet', 'actions'];
+  enseignantColumns: string[] = [ 'cin', 'nom','prenom','dateNaissance','cv', 'grade', 'etablissement', 'actions'];
+  etudiantColumns: string[] = [ 'cin', 'nom','prenom','dateNaissance','cv','encadrant','dateInscription','diplome','sujet', 'actions'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('enseignantPaginator') enseignantPaginator: MatPaginator;
+  @ViewChild('etudiantPaginator') etudiantPaginator: MatPaginator;
 
-  constructor (private MS: MemberService,private dialog: MatDialog,  private router: Router){
+  loadMembers() : void{
+    // Enseignants
     this.MS.getEnseignants().subscribe(members => {
-      this.enseignantSource = new MatTableDataSource(members)
+      this.enseignantSource = new MatTableDataSource(members);
+
+      if (this.enseignantSource){
+        console.log(this.enseignantSource.data);
+        this.enseignantSource.paginator = this.enseignantPaginator; // Assign the paginator
+      }
+
     });
+
+    // Etudiants
     this.MS.getEtudiants().subscribe(members => {
-      this.etudiantSource = new MatTableDataSource(members)
+      this.etudiantSource = new MatTableDataSource(members);
+      if (this.etudiantSource){
+        console.log(this.etudiantSource.data);
+        this.etudiantSource.paginator = this.etudiantPaginator; // Assign the paginator
+      }
+
     });
   }
 
-  ngAfterViewInit() {
-    this.enseignantSource.paginator = this.paginator;
-    this.enseignantSource.sort = this.sort;
+  constructor (private MS: MemberService,private dialog: MatDialog,  private router: Router){
 
-    this.etudiantSource.paginator = this.paginator;
-    this.etudiantSource.sort = this.sort;
+  }
+
+  ngOnInit(){
+    this.loadMembers();
+  }
+  ngAfterViewInit() {
+
   }
 
   applyFilterOnEnseignants(event: Event) {
@@ -83,6 +100,18 @@ export class MemberComponent implements AfterViewInit{
     });
 
 
+  }
+
+  deleteEnseignant(memberId: number){
+    this.MS.deleteEnseignant(memberId).subscribe(()=>{
+      this.loadMembers();
+    })
+  }
+
+  deleteEtudiant(memberId: number){
+    this.MS.deleteEtudiant(memberId).subscribe(()=>{
+      this.loadMembers();
+    })
   }
 
 }

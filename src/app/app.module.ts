@@ -51,7 +51,8 @@ import { AffecterEnseignantComponent } from './affecter-enseignant/affecter-ense
 import { AffecterMemberComponent } from './affecter-member/affecter-member.component';
 import {MatChipsModule} from '@angular/material/chips';
 import { ConsulterMemberComponent } from './consulter-member/consulter-member.component';
-
+import { ConsulterInvitesComponent } from './consulter-invites/consulter-invites.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { ConsulterMemberComponent } from './consulter-member/consulter-member.co
     AffecterEnseignantComponent,
     AffecterMemberComponent,
     ConsulterMemberComponent,
+    ConsulterInvitesComponent,
 
 
   ],
@@ -109,6 +111,7 @@ import { ConsulterMemberComponent } from './consulter-member/consulter-member.co
     MatSortModule,
     MatPaginatorModule,
     MatChipsModule,
+    DragDropModule
 
 
   ],

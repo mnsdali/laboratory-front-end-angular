@@ -101,4 +101,15 @@ export class MemberService {
   {
     return this.httpClient.get<Member>(`${API.url}/${API.member}/members/members-outil/${idOutil}`);
   }
+
+  getMembersByEvent(idEvent: number) : Observable<Member[]>{
+    return this.httpClient.get<Member[]>(`${API.url}/${API.member}/members-per-event/${idEvent}`);
+  }
+  deleteEnseignant(memberId: number): Observable<void>{
+    return this.httpClient.delete<void>(`${API.url}/${API.member}/members/enseignant/${memberId}/delete`);
+  }
+
+  deleteEtudiant(memberId: number): Observable<void>{
+    return this.httpClient.delete<void>(`${API.url}/${API.member}/members/etudiant/${memberId}/delete`);
+  }
 }

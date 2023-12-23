@@ -28,20 +28,23 @@
           <mat-icon>event</mat-icon>
           {{ card.dateDebut | date }} - {{ card.dateFin | date }}
           <mat-icon> location_on</mat-icon> {{ card.lieu }}
+          <button mat-icon-button matTooltip="Afficher la liste des invités" color="green" (click)="consulter(card.id)">
+            <mat-icon>spa</mat-icon>
+          </button>
         </mat-card-subtitle>
 
       </mat-card-header>
       <mat-card-content>
-        <p></p>
+
       </mat-card-content>
       <mat-card-actions fxLayout="row" fxLayoutAlign="space center">
         <button mat-icon-button matTooltip="Modifier" routerLink="{{ card.id }}/edit" color="primary" >
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button matTooltip="Affecter" color="accent" >
-          <mat-icon>favorite</mat-icon>
+        <button mat-icon-button matTooltip="Inviter" color="accent" (click)="affecter(card.id)" >
+          <mat-icon>group_add</mat-icon>
         </button>
-        <button mat-icon-button matTooltip="Supprimer" color="warn" routerLink="{{ card.id }}/delete" >
+        <button mat-icon-button matTooltip="Supprimer" color="warn" (click)="delete(card.id)" >
           <mat-icon>delete</mat-icon>
         </button>
 

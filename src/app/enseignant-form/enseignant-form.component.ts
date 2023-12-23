@@ -15,7 +15,7 @@ export class EnseignantFormComponent {
   matcher = new MyErrorStateMatcher();
   form!: FormGroup;
   enseignantGlobal!: Member;
-  enseignants : Enseignant[] = []
+  idCourant1: number;
   constructor(private MS: MemberService, private router:Router, private activatedRoute: ActivatedRoute) { }
 
   initForm(): void{
@@ -25,39 +25,34 @@ export class EnseignantFormComponent {
       prenom: new FormControl(null, [Validators.required]),
       dateNaissance: new FormControl(null, [Validators.required]),
       cv: new FormControl(null, [Validators.required]),
-      // email: new FormControl(null, [Validators.required]),
-      // password: new FormControl(null, [Validators.required]),
-      // role : new FormControl("enseignant", [Validators.required]),
       grade : new FormControl(null, [Validators.required]),
       etablissement : new FormControl(null, [Validators.required]),
 
     })
   }
 
-  initForm2(enseignant: Member): void{
+  initForm2(enseignant: Member): void {
+    console.log('Initializing form with enseignant:', enseignant);
+
     this.form = new FormGroup({
       cin: new FormControl(enseignant.cin, [Validators.required]),
       nom: new FormControl(enseignant.nom, [Validators.required]),
       prenom: new FormControl(enseignant.prenom, [Validators.required]),
       dateNaissance: new FormControl(enseignant.dateNaissance, [Validators.required]),
       cv: new FormControl(enseignant.cv, [Validators.required]),
-      // email: new FormControl(enseignant.email, [Validators.required, Validators.email]),
-      // password: new FormControl(enseignant.password, [Validators.required]),
-      // role : new FormControl(enseignant.role, [Validators.required]),
-      grade : new FormControl(enseignant.grade, [Validators.required]),
-      etablissement : new FormControl(enseignant.etablissement, [Validators.required]),
+      grade: new FormControl(enseignant.grade, [Validators.required]),
+      etablissement: new FormControl(enseignant.etablissement, [Validators.required]),
+    });
 
-    })
-
+    console.log('Form values after initialization:', this.form.value);
   }
   ngOnInit():void{
-
-    this.MS.getEnseignants().subscribe((enseignants)=>{this.enseignants = enseignants});
-    const idCourant1 = this.activatedRoute.snapshot.params['id']; // "1234"
-    console.log(idCourant1);
-    if (!!idCourant1) // if truly idCourant  // je suis dans edit
+    this.idCourant1 = this.activatedRoute.snapshot.params['id']; // "1234"
+    console.log(this.idCourant1);
+    if (!!this.idCourant1) // if truly idCourant  // je suis dans edit
     {
-      this.MS.getMemberById(idCourant1).subscribe((enseignant)=>{
+      this.MS.getMemberById(this.idCourant1).subscribe((enseignant)=>{
+
           this.enseignantGlobal = enseignant;
           this.initForm2(enseignant);
       })
@@ -71,13 +66,15 @@ export class EnseignantFormComponent {
     // récupérer le contenu
     console.log(this.form.value);
 
-    const enseignant = {...this.enseignantGlobal, ...this.form.value};
-    // const enseignantNew = {...enseignant,
-    //   //  id: enseignant.id ?? Math.ceil(Math.random()*1000),
-    //     // createdDate: enseignant.createdDate ?? new Date().toISOString()
-    // };
-    
-    this.MS.saveMember("enseignant", enseignant).subscribe(()=> {this.router.navigate(['/members'])});
+    var enseignant = {...this.enseignantGlobal, ...this.form.value};
+
+    if (!!this.idCourant1) // if truly idCourant  // je suis dans edit
+    {
+      enseignant = {id:this.idCourant1, ...enseignant};
+      this.MS.updateMember("enseignant", enseignant).subscribe(()=> {this.router.navigate(['/members'])});
+    }else{
+      this.MS.saveMember("enseignant", enseignant).subscribe(()=> {this.router.navigate(['/members'])});
+    }
 
 
 

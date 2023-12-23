@@ -5,6 +5,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Observable } from 'rxjs';
+import { ConsulterInvitesComponent } from '../consulter-invites/consulter-invites.component';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { AffecterMemberComponent } from '../affecter-member/affecter-member.component';
+import { MemberService } from 'src/services/member.service';
+import { Router } from '@angular/router';
 
 
 
@@ -21,9 +26,10 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private ES: EvenementService, private changeDetectorRef: ChangeDetectorRef) {}
+  constructor(private ES: EvenementService, private MS: MemberService, private router:Router, private changeDetectorRef: ChangeDetectorRef,
+    private dialog: MatDialog) {}
 
-  ngOnInit() {
+  loadEvents(): void {
     this.ES.getEvenements().subscribe(events => {
       this.dataSource = new MatTableDataSource(events);
       this.obs = this.dataSource.connect();
@@ -34,6 +40,9 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.dataSource.sort = this.sort;
       }
     });
+  }
+  ngOnInit() {
+    this.loadEvents();
   }
 
   ngAfterViewInit() {
@@ -48,6 +57,46 @@ export class EventsComponent implements OnInit, OnDestroy, AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
+  consulter(eventId: number): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = { eventId };
+    const dialogRef = this.dialog.open(ConsulterInvitesComponent, dialogConfig);
+  }
+
+  affecter(eventId: number): void {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    const dialogRef = this.dialog.open(AffecterMemberComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe((data) =>
+    {
+      console.log(data);
+      this.MS.affectMemberToEvent(data.member.id, eventId).subscribe(()=>{
+        // or manually add the tool to the existing list
+        // this.dataSource.push(toolNew);
+        this.router.navigate(['/dashboard']);
+        // Close the dialog
+
+      });
+    });
+
+
+
+  }
+
+  delete(id : number): void{
+    this.ES.deleteEvenement(id).subscribe(()=>{
+      this.loadEvents();
+    })
+
+  }
+
 
   ngOnDestroy() {
     if (this.dataSource) {

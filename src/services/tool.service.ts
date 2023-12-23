@@ -36,6 +36,7 @@ export class ToolService {
   }
 
   deleteTool(id: number): Observable<void>{
+    this.httpClient.delete<void>(`${API.url}/${API.member}/members-per-outil/${id}/delete`);
     return this.httpClient.delete<void>(`${API.url}/${API.tool}/tools/${id}/delete`);
   }
 

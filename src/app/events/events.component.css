@@ -1,9 +1,11 @@
 .cards{
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .event-card {
+  min-width: 300px;
   margin: 10px;
   flex-basis: calc(25% - 2 * 10px);
   margin-bottom: 16px;
