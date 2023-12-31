@@ -21,6 +21,8 @@ export class MemberService {
   saveMember(type:string, member: Member): Observable<Member>{
     if (type == "etudiant") {
       return this.httpClient.post<Member>(`${API.url}/${API.member}/members/etudiant/create`, member);
+
+      // @RequestBody(name="member") Member member
     } else if (type == "enseignant") {
       return this.httpClient.post<Member>(`${API.url}/${API.member}/members/enseignant/create`, member);
     } else {
@@ -34,7 +36,7 @@ export class MemberService {
   }
 
   updateMember(type:string, member: Member): Observable<Member>{
-    if (type == "etudiant") {
+    if (type == "etudiant") { 
       return this.httpClient.put<Member>(`${API.url}/${API.member}/members/etudiant/${member.id}/update`, member);
     } else if (type == "enseignant") {
       return this.httpClient.put<Member>(`${API.url}/${API.member}/members/enseignant/${member.id}/update`, member);
@@ -64,7 +66,7 @@ export class MemberService {
   }
 
   getEtudiants(): Observable<Etudiant[]>{
-    return this.httpClient.get<Etudiant[]>(`${API.url}/${API.member}/members/etudiants`);
+    return this.httpClient.get<Etudiant[]>(`${API.url}/${API.member}/members/etudiants`); // observe
     //return new Observable((observer) => {observer.next(this.tab.find((member)=>member.id === id))});
   }
 

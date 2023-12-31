@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./member.component.css']
 })
 export class MemberComponent implements AfterViewInit, OnInit{
-  enseignantSource: MatTableDataSource<Enseignant>;
+  enseignantSource: MatTableDataSource<Enseignant>; // db.tab.enseignants
   etudiantSource: MatTableDataSource<Etudiant>;
 
   enseignantColumns: string[] = [ 'cin', 'nom','prenom','dateNaissance','cv', 'grade', 'etablissement', 'actions'];

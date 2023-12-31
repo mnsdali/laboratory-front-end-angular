@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Etudiant } from 'src/models/etudiant';
@@ -12,11 +12,11 @@ import { Enseignant } from 'src/models/enseignant';
   templateUrl: './etudiant-form.component.html',
   styleUrls: ['./etudiant-form.component.css']
 })
-export class EtudiantFormComponent {
+export class EtudiantFormComponent  implements OnInit {
   matcher = new MyErrorStateMatcher();
   form!: FormGroup;
   etudiantGlobal!: Member;
-  enseignants : Enseignant[] = [];
+  // enseignants : Enseignant[] = [];
   idCourant1: number;
   constructor(private MS: MemberService, private router:Router, private activatedRoute: ActivatedRoute) { }
 
@@ -57,7 +57,7 @@ export class EtudiantFormComponent {
   }
   ngOnInit():void{
 
-    this.MS.getEnseignants().subscribe((enseignants)=>{this.enseignants = enseignants});
+    // this.MS.getEnseignants().subscribe((enseignants)=>{this.enseignants = enseignants});
     this.idCourant1 = this.activatedRoute.snapshot.params['id']; // "1234"
     console.log(this.idCourant1);
     if (!!this.idCourant1) // if truly idCourant  // je suis dans edit
@@ -65,7 +65,7 @@ export class EtudiantFormComponent {
       this.MS.getMemberById(this.idCourant1).subscribe((etudiant)=>{
           this.etudiantGlobal = etudiant;
           this.initForm2(etudiant);
-      })
+      });
 
     }else{ // je suis dans create
       this.initForm();
@@ -77,6 +77,10 @@ export class EtudiantFormComponent {
     console.log(this.form.value);
 
     var etudiant = {...this.etudiantGlobal, ...this.form.value};
+
+    // this.form.value.cin 
+//
+    //
     // const etudiantNew = {...etudiant,
     //   //  id: etudiant.id ?? Math.ceil(Math.random()*1000),
     //     // createdDate: etudiant.createdDate ?? new Date().toISOString()
@@ -88,10 +92,5 @@ export class EtudiantFormComponent {
     }else{
       this.MS.saveMember("etudiant", etudiant).subscribe(()=> {this.router.navigate(['/members'])});
     }
-
-
-
-
-
     }
 }

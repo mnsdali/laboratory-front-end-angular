@@ -13,7 +13,7 @@ import { MemberService } from 'src/services/member.service';
   styleUrls: ['./tools-create.component.css']
 })
 export class ToolsCreateComponent implements OnInit {
-  members : Member[] = []
+  
   form!: FormGroup;
   constructor(
     private fb: FormBuilder,
@@ -23,15 +23,17 @@ export class ToolsCreateComponent implements OnInit {
     private router: Router,
     ) {}
 
-
-  ngOnInit(): void {
-    this.MS.getMembers().subscribe((members)=>{this.members = members});
+  initForm(): void{
     this.form = this.fb.group({
       nom: new FormControl(null, []),
       date: new FormControl(null, []),
       createur: new FormControl(null, []),
       source: new FormControl(null, [])
     })
+  }
+  ngOnInit(): void {
+
+    this.initForm();
   }
 
   close(){

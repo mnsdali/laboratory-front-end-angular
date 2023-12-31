@@ -63,7 +63,6 @@ export class ToolsComponent implements AfterViewInit,OnInit, OnDestroy  {
 
   openToolCreate(): void {
     const dialogConfig = new MatDialogConfig();
-
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
 
@@ -71,7 +70,6 @@ export class ToolsComponent implements AfterViewInit,OnInit, OnDestroy  {
 
     dialogRef.afterClosed().subscribe((data) =>
     {
-
       const tool = { ...data };
 
       this.TS.saveTool(tool).subscribe((tool) => {
@@ -81,7 +79,6 @@ export class ToolsComponent implements AfterViewInit,OnInit, OnDestroy  {
         // this.dataSource.push(toolNew);
 
         // Close the dialog
-
       });
     });
 
