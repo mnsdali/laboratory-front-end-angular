@@ -1,69 +1,166 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PublicationService } from 'src/services/publication.service';
 import { EvenementService } from 'src/services/event.service';
 import { MemberService } from 'src/services/member.service';
 import { ToolService } from 'src/services/tool.service';
 import { ChartDataset, ChartOptions } from 'chart.js';
+import { MatLabel } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit{
   nb_members :number= 0;
   nb_articles :number= 0;
   nb_events:number= 0;
   nb_tools :number= 0;
+  articlesMemberArr : string[];
 
+  //bar
+
+  radarChartLabels: string[] = [];
+  radarChartData: ChartDataset[] = [
+    { data: [], label: 'enseignants' },
+    { data: [], label: 'etudiants' },
+  
+    //{ data: [28, 48, 40, 19, 86, 27, 90], label: 'Invités' }
+  ];
+  radarChartOptions: ChartOptions = {
+    responsive: true,
+    scales: {
+      r: {
+        ticks: {
+          stepSize: 1, // Set the step size to 1 to display only integers
+          precision: 0
+        },
+      },
+    },
+  };
+  //bar
+  barChartOptions: ChartOptions = {
+    responsive: true,
+  };
+  barChartLabels: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  barChartLegend = true;
+  barChartPlugins = [];
+  barChartData: ChartDataset[] = [
+    { data: [], label: 'Evenements' },
+    //{ data: [28, 48, 40, 19, 86, 27, 90], label: 'Invités' }
+  ];
 
   // line
   chartData: ChartDataset[] = [
     {
+
       // ⤵️ Add these
-      label: 'articles par membre',
+      label: 'articles',
+      data: [ ]
+    },
+    {
+      label: 'outils',
       data: [ ]
     }
+
   ];
   chartLabels: string[] = [];
-  chartOptions: ChartOptions = {};
-  // pie
-  chartTypeData: ChartDataset[] = [
-    {
-      // ⤵️ Add these
-      label: 'Number',
-      data: [ ]
-    }
-  ];
-  chartTypesLabel: string[] = ["etudiant", "enseignant"];
+  chartOptions: ChartOptions = {
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          precision: 0
+      }
+      },
+    },
+  };
 
+  // pie
+  chartTypeData: ChartDataset[];
+  chartTypesLabel: string[] = ["etudiant", "enseignant"];
 
   constructor (private ES: EvenementService, private TS: ToolService, private PS: PublicationService, private MS: MemberService)
   {
-    MS.getMembers().subscribe(members =>{
+
+
+    // this.nb_events = ES.tab.length;
+
+
+  }
+
+  ngOnInit():void{
+    this.MS.getMembers().subscribe(members =>{
+
       members.forEach(element => {
+
         this.chartLabels.push(element.nom + " " + element.prenom);
+
       });
       this.nb_members = members.length;
     })
 
     this.MS.getNbPubMembers().subscribe((tab) => { this.chartData[0].data = tab });
+    this.MS.getNbOutilMembers().subscribe((tab)=> { console.log(tab); this.chartData[1].data = tab; });
     this.MS.getNumberPerMemberType().subscribe((mapRole) => {
-      const etudiantValue = mapRole.get('etudiant');
-      const enseignantValue = mapRole.get('enseignant');
+      console.log(mapRole);
+      var etudiantValue = mapRole['etudiant'];
+      var enseignantValue = mapRole['enseignant'];
+      // pie
+      this.chartTypeData = [
+        {
+          // ⤵️ Add these
+          label: 'Number',
+          data: [etudiantValue, enseignantValue]
+        }
+      ];
 
-      if (etudiantValue !== undefined) {
-        this.chartTypeData[0].data.push(etudiantValue);
-      }
 
-      if (enseignantValue !== undefined) {
-        this.chartTypeData[0].data.push(enseignantValue);
-      }
+
     })
-    // this.nb_events = ES.tab.length;
-    // this.nb_tools = TS.tabOutils.length;
-
-
+    this.TS.getTools().subscribe((tools) => {this.nb_tools = tools.length})
+    this.ES.getEvenements().subscribe((events)=> {this.nb_events = events.length})
+    this.PS.getPublications().subscribe((pubs)=> {this.nb_articles = pubs.length})
+    this.ES.getFullYearsEvents(2020,2025).subscribe((events)=>{
+      console.log(events);
+      this.barChartData[0].data = events;
+    })
+    this.MS.getNumberPerMemberGrade().subscribe((map) => {
+      console.log(map);
+      this.radarChartLabels = this.radarChartLabels.concat(Object.keys(map));
+      
+      // For enseignant table
+      
+        this.radarChartData[0].data = this.radarChartData[0].data.concat(Object.values(map));
+      
+    
+      // For etudiant table
+      this.radarChartData[1].data = this.radarChartData[1].data.concat(new Array(Object.values(map).length).fill(0));
+      
+      console.log("enseignant ", this.radarChartData);
+    });
+    
+    this.MS.getNumberPerMemberDiplome().subscribe((map) => {
+      console.log(map);
+      this.radarChartLabels = this.radarChartLabels.concat(Object.keys(map));
+    
+      // For enseignant table
+      this.radarChartData[1].data = this.radarChartData[1].data.concat(Object.values(map));
+    
+      // For etudiant table
+      
+        this.radarChartData[0].data = this.radarChartData[0].data.concat(new Array(Object.values(map).length).fill(0));
+      
+    
+      console.log("etudiant ", this.radarChartData);
+    });
   }
 
 }

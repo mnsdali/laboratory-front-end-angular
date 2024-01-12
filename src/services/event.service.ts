@@ -43,7 +43,10 @@ export class EvenementService {
     //return new Observable((observer) => {observer.next(this.tab.find((event)=>event.id === id))});
   }
 
-  
+  getFullYearsEvents(startYear: number, endYear: number): Observable<number[]> {
+    const url = `${API.url}/${API.event}/events/full-years-events/${startYear}/${endYear}`;
+    return this.httpClient.get<number[]>(url);
+  }
 
 
 }

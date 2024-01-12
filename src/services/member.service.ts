@@ -36,7 +36,7 @@ export class MemberService {
   }
 
   updateMember(type:string, member: Member): Observable<Member>{
-    if (type == "etudiant") { 
+    if (type == "etudiant") {
       return this.httpClient.put<Member>(`${API.url}/${API.member}/members/etudiant/${member.id}/update`, member);
     } else if (type == "enseignant") {
       return this.httpClient.put<Member>(`${API.url}/${API.member}/members/enseignant/${member.id}/update`, member);
@@ -80,11 +80,30 @@ export class MemberService {
   {
     return this.httpClient.get<number[]>(`${API.url}/${API.member}/members/numberpublications`);
   }
-
-  getNumberPerMemberType(): Observable<Map<string,number>>
+  getNbOutilMembers(): Observable<number[]>
   {
-    return this.httpClient.get<Map<string,number>>(`${API.url}/${API.member}/members/members-per-role`);
+    return this.httpClient.get<number[]>(`${API.url}/${API.member}/members/numberoutils`);
   }
+
+  getNumberPerMemberType(): Observable<Record<string,number>>
+  {
+    return this.httpClient.get<Record<string,number>>(`${API.url}/${API.member}/members/members-per-role`);
+  }
+
+  getNumberPerMemberGrade(): Observable<Record<string,number>>
+  {
+    return this.httpClient.get<Record<string,number>>(`${API.url}/${API.member}/members/members-per-grade`);
+  }
+  getNumberPerMemberDiplome(): Observable<Record<string,number>>
+  {
+    return this.httpClient.get<Record<string,number>>(`${API.url}/${API.member}/members/members-per-diplome`);
+  }
+
+  getNumberPerMemberEtablissement(): Observable<Record<string,number>>
+  {
+    return this.httpClient.get<Record<string,number>>(`${API.url}/${API.member}/members/members-per-etablissement`);
+  }
+
 
   affectMemberToEvent(idMember: number, idEvent: number): Observable<void>
   {
