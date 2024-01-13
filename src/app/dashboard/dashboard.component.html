@@ -51,15 +51,17 @@
 </div>
 <div fxLayout="row" fxLayoutAlign="space-evenly center" class="margin-top"  >
 
-<div class="chart-wrapper chart-details ">
-  <canvas baseChart
-            [type]="'line'"
-      [datasets]="chartData"
-      [labels]="chartLabels"
-      [options]="chartOptions"
+
+  <div class="chart-wrapper chart-details ">
+    <canvas baseChart
+            [type]="'pie'"
+      [datasets]="etablissementTypeData"
+      [labels]="etablissementTypesLabel"
+
       >
     </canvas>
   </div>
+  
 
   <div class="chart-wrapper chart-details ">
     <canvas baseChart
@@ -83,7 +85,7 @@
 
 </div>
 <div fxLayout="row" fxLayoutAlign="space-evenly center" class="margin-top ">
-  <div class="chart-details2 ">
+  <div class="chart-details2 bar-dimensions ">
   <div class="chart-wrapper  text-center ">
     <canvas baseChart
       [datasets]="barChartData"
@@ -96,12 +98,12 @@
     <h3 class="mt-3">Nombre d'évennements pendants les 12 mois de l'année 2020 à 2023</h3>
   </div>
   </div>
-  <div class="chart-wrapper chart-details2 ">
-    <canvas baseChart
-            [type]="'pie'"
-      [datasets]="chartTypeData"
-      [labels]="chartTypesLabel"
-
+  <div class="chart-wrapper chart-details2 line-dimensions ">
+  <canvas baseChart
+            [type]="'line'"
+      [datasets]="chartData"
+      [labels]="chartLabels"
+      [options]="chartOptions"
       >
     </canvas>
   </div>

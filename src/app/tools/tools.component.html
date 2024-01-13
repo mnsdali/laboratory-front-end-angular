@@ -16,15 +16,16 @@
   </mat-form-field>
 
 </div>
+<div class="justify-content">
 <div class="cards mat-elevation-z8">
 
-  <mat-card *ngFor="let card of obs | async" class="event-card">
+  <mat-card *ngFor="let card of obs | async" class="event-card ">
 
 
         <div class="card-header">
           <span>Outil N° {{ card.id }}</span>
         </div>
-        <div fxLayout="row" fxLayoutAlign="space-around center">
+        <div fxLayout="row" fxLayoutAlign="space-around center" class=" pastel-grad">
           <div class="card-content" fxLayout="column" fxLayoutAlign="space-around begin" >
             <p fxLayout="row" fxLayoutAlign="begin center"> <mat-icon>work_outline</mat-icon> <span class="prop">{{card.nom}}</span></p>
             <p fxLayout="row" fxLayoutAlign="begin center">	<mat-icon>today</mat-icon><span class="prop">{{ card.date }}</span></p>
@@ -51,6 +52,7 @@
 
 
   </mat-card>
+</div>
 </div>
 <mat-paginator
   [pageSizeOptions]="[6, 12, 18, 24]"

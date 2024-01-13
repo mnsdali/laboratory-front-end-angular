@@ -14,6 +14,14 @@ export class AuthService {
         public afAuth: AngularFireAuth,
     ) {
     }
+    userState: boolean;
+    async isAuthenticated(): Promise<boolean> {
+      const user = await this.getUserClaims();
+      this.userState = !!user;
+      console.log(user);
+
+      return this.userState == true;
+    }
 
 
     getUserClaims(): Promise<any> {
@@ -59,13 +67,13 @@ export class AuthService {
         return this.afAuth.signInWithPopup(new auth.GoogleAuthProvider());
     }
 
-    
 
 
 
 
 
-    
+
+
 
     doLogout(): Promise<void> {
         return new Promise<void>((resolve, reject) => {
@@ -81,4 +89,3 @@ export class AuthService {
     }
 
 }
- 

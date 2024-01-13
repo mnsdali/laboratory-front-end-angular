@@ -45,27 +45,25 @@ export class DashboardComponent implements OnInit{
   barChartLabels: string[] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   barChartLegend = true;
   barChartPlugins = [];
-  barChartData: ChartDataset[] = [
-    { data: [], label: 'Evenements' },
-    //{ data: [28, 48, 40, 19, 86, 27, 90], label: 'Invités' }
-  ];
+  barChartData: ChartDataset[];
 
   // line
   chartData: ChartDataset[] = [
-    {
+    // {
 
-      // ⤵️ Add these
-      label: 'articles',
-      data: [ ]
-    },
-    {
-      label: 'outils',
-      data: [ ]
-    }
+    //   // ⤵️ Add these
+    //   label: 'articles',
+    //   data: [ ]
+    // },
+    // {
+    //   label: 'outils',
+    //   data: [ ]
+    // }
 
   ];
   chartLabels: string[] = [];
   chartOptions: ChartOptions = {
+    
     scales: {
       x: {
         grid: {
@@ -77,15 +75,20 @@ export class DashboardComponent implements OnInit{
           display: false,
         },
         ticks: {
-          precision: 0
+          precision: 0,
+          
       }
       },
-    },
+    }
   };
 
   // pie
   chartTypeData: ChartDataset[];
   chartTypesLabel: string[] = ["etudiant", "enseignant"];
+
+  // pie
+  etablissementTypeData: ChartDataset[];
+  etablissementTypesLabel: string[] = [];
 
   constructor (private ES: EvenementService, private TS: ToolService, private PS: PublicationService, private MS: MemberService)
   {
@@ -107,8 +110,19 @@ export class DashboardComponent implements OnInit{
       this.nb_members = members.length;
     })
 
-    this.MS.getNbPubMembers().subscribe((tab) => { this.chartData[0].data = tab });
-    this.MS.getNbOutilMembers().subscribe((tab)=> { console.log(tab); this.chartData[1].data = tab; });
+    this.MS.getNbPubMembers().subscribe((tab) => {
+
+       this.chartData= [...this.chartData, {
+        label: 'articles',
+        data: [...tab ]
+    }]
+    });
+    this.MS.getNbOutilMembers().subscribe((tab)=> { 
+      this.chartData= [...this.chartData, {
+        label: 'outils',
+        data: [...tab ]
+    }]
+     });
     this.MS.getNumberPerMemberType().subscribe((mapRole) => {
       console.log(mapRole);
       var etudiantValue = mapRole['etudiant'];
@@ -129,8 +143,11 @@ export class DashboardComponent implements OnInit{
     this.ES.getEvenements().subscribe((events)=> {this.nb_events = events.length})
     this.PS.getPublications().subscribe((pubs)=> {this.nb_articles = pubs.length})
     this.ES.getFullYearsEvents(2020,2025).subscribe((events)=>{
-      console.log(events);
-      this.barChartData[0].data = events;
+      // console.log(events);
+      this.barChartData = [
+        { data: [...events], label: 'Evenements' },
+        //{ data: [28, 48, 40, 19, 86, 27, 90], label: 'Invités' }
+      ];
     })
     this.MS.getNumberPerMemberGrade().subscribe((map) => {
       console.log(map);
@@ -144,11 +161,11 @@ export class DashboardComponent implements OnInit{
       // For etudiant table
       this.radarChartData[1].data = this.radarChartData[1].data.concat(new Array(Object.values(map).length).fill(0));
       
-      console.log("enseignant ", this.radarChartData);
+      // console.log("enseignant ", this.radarChartData);
     });
     
     this.MS.getNumberPerMemberDiplome().subscribe((map) => {
-      console.log(map);
+      // console.log(map);
       this.radarChartLabels = this.radarChartLabels.concat(Object.keys(map));
     
       // For enseignant table
@@ -159,7 +176,21 @@ export class DashboardComponent implements OnInit{
         this.radarChartData[0].data = this.radarChartData[0].data.concat(new Array(Object.values(map).length).fill(0));
       
     
-      console.log("etudiant ", this.radarChartData);
+      // console.log("etudiant ", this.radarChartData);
+    });
+
+    this.MS.getNumberPerMemberEtablissement().subscribe((map) => {
+      console.log(map);
+      this.etablissementTypesLabel = this.etablissementTypesLabel.concat(Object.keys(map));
+      this.etablissementTypeData = [
+        {
+          // ⤵️ Add these
+          label: 'Enseigants',
+          data: Object.values(map)
+        }];
+      // For enseignant table
+    
+      console.log("etudiant ", this.etablissementTypeData);
     });
   }
 

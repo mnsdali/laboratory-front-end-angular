@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>Tools Form</h2>
+
+<mat-dialog-content [formGroup]="form" fxLayout="column" fxLayoutAlign="space-evenly center">
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Titre</mat-label>
+    <input matInput name="titre" formControlName="titre" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Lien</mat-label>
+    <input matInput name="lien" formControlName="lien" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Enter a date</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Select a date" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Source PDF</mat-label>
+    <input matInput name="sourcepdf" formControlName="sourcepdf" />
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<mat-dialog-actions fxLayout="row" fxLayoutAlign="space-evenly center" >
+  <button mat-raised-button color="primary" (click)="close()"> Quitter</button>
+  <button mat-raised-button color="warn" (click)="save()"> Soumettre</button>
+</mat-dialog-actions>

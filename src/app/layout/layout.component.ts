@@ -1,6 +1,7 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/services/AuthService';
+import { interval } from 'rxjs';
+import { AuthService } from 'src/services/auth-service.service';
 
 @Component({
   selector: 'app-layout',
@@ -20,14 +21,22 @@ export class LayoutComponent implements OnInit {
     })
 
   }
+
+  isAuth():boolean{
+    return !!this.user;
+  }
   tryLogout(): void
   {
-    this.authService.doLogout().then(()=>{this.successRedirect()})
+    this.authService.doLogout().then(()=>{this.successRedirect();//location.reload();
+    interval(30).subscribe(() => {
+      location.reload();});
+
+    })
   }
 
   successRedirect(): void
   {
-    this.ngZone.run(()=>this.router.navigate([ '/login']));
+    this.ngZone.run(()=>this.router.navigate([ '/']));
   }
 
   ngOnInit(): void {

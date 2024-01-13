@@ -53,6 +53,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import { ConsulterMemberComponent } from './consulter-member/consulter-member.component';
 import { ConsulterInvitesComponent } from './consulter-invites/consulter-invites.component';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import { ArticleCreateComponent } from './article-create/article-create.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     AffecterMemberComponent,
     ConsulterMemberComponent,
     ConsulterInvitesComponent,
+    ArticleCreateComponent,
 
 
   ],

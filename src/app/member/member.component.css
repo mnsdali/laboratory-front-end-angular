@@ -1,4 +1,7 @@
 /* Structure */
+.pastel-grad{
+  background-image: linear-gradient(to top, #c1d3ff 0%, #dcf5f7 49%, #fcd9e9 100%);
+}
 .example-container {
   margin-top: 2%;
   margin-bottom: 2%;

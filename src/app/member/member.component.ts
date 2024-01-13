@@ -93,8 +93,9 @@ export class MemberComponent implements AfterViewInit, OnInit{
       this.MS.affectEtudiantToEnseignant(etudiant, data.encadrant).subscribe(()=>{
         // or manually add the tool to the existing list
         // this.dataSource.push(toolNew);
-        this.router.navigate(['/dashboard']);
+        // this.router.navigate(['/dashboard']);
         // Close the dialog
+        location.reload();
 
       });
     });
